@@ -18,12 +18,11 @@ const SampleChart = () => {
 
       const timestamps = data.map(sample => sample.ts);
       const machineStatus = data.map(sample => sample.machine_status);
-      const vibration = data.map(sample => sample.vibration);
-      const colors = data.map(sample => {
-        if (sample.machine_status === 0) return 'yellow';
-        else if (sample.machine_status === 1) return 'green';
-        else return 'red';
-      });
+
+      const fixedHeight = 50; 
+      const lineData = Array.from({ length: machineStatus.length }, () => fixedHeight);
+
+      const colors = machineStatus.map(status => (status === 0 ? 'yellow' : 'green'));
 
       const newChartInstance = new Chart(ctx, {
         type: 'line',
@@ -31,14 +30,12 @@ const SampleChart = () => {
           labels: timestamps,
           datasets: [{
             label: 'Machine Status',
-            data: machineStatus,
+            data: lineData,
             borderColor: colors,
-            borderWidth: 1
-          }, {
-            label: 'Vibration',
-            data: vibration,
-            borderColor: 'blue', // Adjust color as needed
-            borderWidth: 1
+            borderWidth: 10,
+            borderCapStyle: 'square', 
+            lineTension: 0, 
+            fill: false
           }]
         },
         options: {
@@ -48,6 +45,13 @@ const SampleChart = () => {
               time: {
                 parser: 'YYYY-MM-DDTHH:mm:ss',
                 unit: 'second'
+              }
+            },
+            y: {
+              min: 40, 
+              max: 60, 
+              ticks: {
+                stepSize: 10 
               }
             }
           }
