@@ -18,24 +18,20 @@ const SampleChart = () => {
 
       const timestamps = data.map(sample => sample.ts);
       const machineStatus = data.map(sample => sample.machine_status);
+      const colors = machineStatus.map(status => (status === 0 ? 'yellow' : 'green'));
 
       const fixedHeight = 50; 
       const lineData = Array.from({ length: machineStatus.length }, () => fixedHeight);
 
-      const colors = machineStatus.map(status => (status === 0 ? 'yellow' : 'green'));
-
       const newChartInstance = new Chart(ctx, {
-        type: 'line',
+        type: 'bar',
         data: {
           labels: timestamps,
           datasets: [{
             label: 'Machine Status',
             data: lineData,
-            borderColor: colors,
-            borderWidth: 10,
-            borderCapStyle: 'square', 
-            lineTension: 0, 
-            fill: false
+            backgroundColor: colors,
+            borderWidth: 0,
           }]
         },
         options: {
